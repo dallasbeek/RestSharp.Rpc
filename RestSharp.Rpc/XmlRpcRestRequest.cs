@@ -36,7 +36,7 @@ namespace RestSharp {
       private void Initialize ( string methodName, bool useIntTag = false ) {
          AddHeader( "Accept", string.Empty );
          RequestFormat = DataFormat.Xml;
-         //XmlSerializer = new XmlRpcSerializer( methodName, useIntTag );
+         XmlSerializer = new XmlRpcSerializer( methodName, useIntTag );
       }
 
       public IRestRequest AddXmlRpcBody ( params object[] args ) {

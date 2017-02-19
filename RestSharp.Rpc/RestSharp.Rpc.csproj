@@ -45,11 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deserializers\XmlRpcDeserializer.cs" />
+    <Compile Include="XmlRpcFaultException.cs" />
     <Compile Include="XmlRpcRestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlRpcRestRequest.cs" />
-    <Compile Include="RpcParser.cs" />
-    <Compile Include="RpcString.cs" />
+    <Compile Include="RpcResponseValue.cs" />
     <Compile Include="Serializers\XmlRpcSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,22 +1,4 @@
-﻿#region License
-
-//   Copyright 2010 John Sheehan
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//   limitations under the License. 
-
-#endregion
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,6 +7,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using RestSharp.Extensions;
+using RestSharp;
 
 #if !SILVERLIGHT && !WINDOWS_PHONE
 using System.ComponentModel;
@@ -33,6 +16,12 @@ using System.ComponentModel;
 namespace RestSharp.Deserializers {
 
    public class XmlRpcDeserializer : IDeserializer {
+
+      public XmlRpcDeserializer () {
+         this.Culture = CultureInfo.InvariantCulture;
+         DateFormat = "yyyyMMdd'T'HH':'mm':'ss";
+      }
+
       public string RootElement { get; set; }
 
       public string Namespace { get; set; }
@@ -41,26 +30,19 @@ namespace RestSharp.Deserializers {
 
       public CultureInfo Culture { get; set; }
 
-      public XmlRpcDeserializer () {
-         this.Culture = CultureInfo.InvariantCulture;
-      }
 
       public virtual T Deserialize<T> ( IRestResponse response ) {
          if ( string.IsNullOrEmpty( response.Content ) ) {
             return default( T );
          }
 
-         XDocument doc = XDocument.Parse( response.Content );
-         XElement root = doc.Root;
+         XDocument rdoc = XDocument.Parse( response.Content );
 
-         if ( this.RootElement.HasValue() && doc.Root != null ) {
-            root = doc.Root.DescendantsAndSelf( this.RootElement.AsNamespaced( this.Namespace ) ).SingleOrDefault();
+         if ( rdoc.Root.Element( "fault" ) != null ) {
+            throw ParseFault( rdoc.Root.Element( "fault" ) );
          }
-
-         // autodetect xml namespace
-         if ( !this.Namespace.HasValue() ) {
-            RemoveNamespace( doc );
-         }
+         var doc = TransformXml( rdoc.Root );
+         XElement root = doc;
 
          T x = Activator.CreateInstance<T>();
          Type objType = x.GetType();
@@ -74,33 +56,39 @@ namespace RestSharp.Deserializers {
          return x;
       }
 
-      private static void RemoveNamespace ( XDocument xdoc ) {
-         if ( xdoc.Root != null ) {
-            foreach ( XElement e in xdoc.Root.DescendantsAndSelf() ) {
-               if ( e.Name.Namespace != XNamespace.None ) {
-                  e.Name = XNamespace.None.GetName( e.Name.LocalName );
-               }
+      private static XmlRpcFaultException ParseFault ( XElement fault ) {
+         var faultMembers = fault.Element( "value" ).Element( "struct" ).Elements( "member" );
+         int faultCodeValue = -1;
+         string faultStringValue = "unknown";
 
-               if ( e.Attributes()
-                    .Any( a => a.IsNamespaceDeclaration || a.Name.Namespace != XNamespace.None ) ) {
-                  e.ReplaceAttributes(
-                      e.Attributes()
-                       .Select( a => a.IsNamespaceDeclaration
-                            ? null
-                            : a.Name.Namespace != XNamespace.None
-                                ? new XAttribute( XNamespace.None.GetName( a.Name.LocalName ), a.Value )
-                                : a ) );
-               }
+         var faultCodeMember = faultMembers.Where( i => ( string ) i.Element( "name" ) == "faultCode" ).SingleOrDefault();
+         if (faultCodeMember != null ) {
+           if (faultCodeMember.Element("value").Element("int") != null ) {
+               faultCodeValue = ( int ) faultCodeMember.Element( "value" ).Element( "int" );
+            }
+            if ( faultCodeMember.Element( "value" ).Element( "i4" ) != null ) {
+               faultCodeValue = ( int ) faultCodeMember.Element( "value" ).Element( "i4" );
             }
          }
+
+         var faultStringMember = faultMembers.Where( i => ( string ) i.Element( "name" ) == "faultString" ).SingleOrDefault();
+         if ( faultStringMember != null ) {
+            if ( faultStringMember.Element( "value" ).Element( "string" ) != null ) {
+               faultStringValue = ( string ) faultStringMember.Element( "value" ).Element( "string" );
+            }
+         }
+
+         return new XmlRpcFaultException( faultCodeValue, faultStringValue );
       }
 
       protected virtual object Map ( object x, XElement root ) {
          Type objType = x.GetType();
+
          PropertyInfo[] props = objType.GetProperties();
 
          foreach ( PropertyInfo prop in props ) {
             Type type = prop.PropertyType;
+
 #if !WINDOWS_UWP
             bool typeIsPublic = type.IsPublic || type.IsNestedPublic;
 #else
@@ -331,8 +319,13 @@ namespace RestSharp.Deserializers {
                : type.GetTypeInfo().BaseType.GetGenericArguments()[0];
 #endif
          IList list = ( IList ) Activator.CreateInstance( type );
-         IList<XElement> elements = root.Descendants( t.Name.AsNamespaced( this.Namespace ) )
-                                        .ToList();
+
+         IList<XElement> elements = root.Descendants( t.Name.AsNamespaced( this.Namespace ) ).ToList();
+
+         if ( !elements.Any() ) {
+            elements = root.Descendants( "struct" ).ToList();
+         }
+
          string name = t.Name;
          DeserializeAsAttribute attribute = t.GetAttribute<DeserializeAsAttribute>();
 
@@ -469,6 +462,39 @@ namespace RestSharp.Deserializers {
                     .OrderBy( d => d.Ancestors().Count() )
                     .Attributes()
                     .FirstOrDefault( d => names.Contains( d.Name.LocalName.RemoveUnderscoresAndDashes() ) );
+      }
+
+      private static XElement TransformXml ( XElement data ) {
+         var valueElement = data.Element( "params" ).Element( "param" ).Element( "value" );
+         return TransformValue( valueElement, "Response" );
+      }
+
+      private static XElement TransformValue ( XElement value, string name ) {
+
+         var child = value.Descendants().First();
+         var childName = child.Name;
+
+         if ( childName == "string" || childName == "i4" || childName == "int" || childName == "boolean" ||
+             childName == "string" || childName == "double" || childName == "iso8601" || childName == "base64" ) {
+            return new XElement( name, child.Value );
+         } else if ( childName == "array" ) {
+            return new XElement( name, ExtractArray( child.Element( "data" ).Elements( "value" ), name == "Response" ? null : name ) );
+         } else if ( childName == "struct" ) {
+            return new XElement( name, ExtractStruct( child.Elements( "member" ) ) );
+         }
+         return null;
+      }
+
+      private static List<XElement> ExtractArray ( IEnumerable<XElement> values, string name ) {
+         return values.Select( p => TransformValue( p, name ?? p.Descendants().First().Name.ToString() ) ).ToList();
+      }
+
+      private static List<XElement> ExtractStruct ( IEnumerable<XElement> members ) {
+         return members.Select( p => ExtractMember( p ) ).ToList();
+      }
+
+      private static XElement ExtractMember ( XElement member ) {
+         return TransformValue( member.Element( "value" ), ( string ) member.Element( "name" ) );
       }
    }
 }
