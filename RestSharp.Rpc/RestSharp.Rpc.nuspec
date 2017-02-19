@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Dallas Beek</authors>
+    <owners>Dallas Beek</owners>
+    <licenseUrl>https://github.com/dallasbeek/RestSharp.Rpc/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/dallasbeek/RestSharp.Rpc</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Serializer and Deserializer support for RestSharp XML RPC client.</description>
+    <releaseNotes>Initial Release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>REST HTTP RESTSHARP XML RPC</tags>
+  </metadata>
+</package>
