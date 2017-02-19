@@ -475,7 +475,7 @@ namespace RestSharp.Deserializers {
          var childName = child.Name;
 
          if ( childName == "string" || childName == "i4" || childName == "int" || childName == "boolean" ||
-             childName == "string" || childName == "double" || childName == "iso8601" || childName == "base64" ) {
+             childName == "string" || childName == "double" || childName == "dateTime.iso8601" || childName == "base64" ) {
             return new XElement( name, child.Value );
          } else if ( childName == "array" ) {
             return new XElement( name, ExtractArray( child.Element( "data" ).Elements( "value" ), name == "Response" ? null : name ) );
