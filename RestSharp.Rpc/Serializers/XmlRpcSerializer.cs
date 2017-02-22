@@ -61,8 +61,12 @@ namespace RestSharp.Serializers {
 #endif
                 {
                SerializeScaler( paramsElement, param );
-            } else if ( propType is IList ) {
-               SerializeArray( paramsElement, ( IList ) param );
+            } else if ( propType == typeof( byte[] ) ) {
+               paramsElement.Add( new XElement("param", SerializeValue( param ) ) );
+            } else if ( propType.IsArray ) {
+               var valueElement = new XElement( "value" );
+               SerializeArray( valueElement, ( IList ) param );
+               paramsElement.Add( new XElement( "param", valueElement ) );
             } else {
                SerializeStruct( paramsElement, param );
             }
