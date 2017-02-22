@@ -7,8 +7,8 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using RestSharp.Extensions;
-using RestSharp;
-
+using RestSharp.Rpc.Attributes;
+using RestSharp.Rpc.Extensions;
 #if !SILVERLIGHT && !WINDOWS_PHONE
 using System.ComponentModel;
 #endif
@@ -359,6 +359,16 @@ namespace RestSharp.Deserializers {
                            .ToList();
          }
 
+            if (t.GetCustomAttribute<ByOrdinalAttribute>() != null && !elements.Any()) {
+                var props = t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                             .Where(p => p.GetCustomAttribute<ByOrdinalAttribute>() != null)
+                             .OrderBy(p => p.GetCustomAttribute<ByOrdinalAttribute>().Order)
+                             .ToArray();
+                elements = root.Elements().ToList();
+                elements.Each((element, i) => {
+                    element.Elements().Each((child, j) => child.Name = props[j].Name);
+                });
+            }
          this.PopulateListFromElements( t, elements, list );
 
          // get properties too, not just list items
@@ -474,7 +484,7 @@ namespace RestSharp.Deserializers {
          var child = value.Descendants().First();
          var childName = child.Name;
 
-         if ( childName == "string" || childName == "i4" || childName == "int" || childName == "boolean" ||
+            if (childName == "string" || childName == "i4" || childName == "i8" || childName == "int" || childName == "boolean" ||
              childName == "string" || childName == "double" || childName == "dateTime.iso8601" || childName == "base64" ) {
             return new XElement( name, child.Value );
          } else if ( childName == "array" ) {
@@ -486,7 +496,15 @@ namespace RestSharp.Deserializers {
       }
 
       private static List<XElement> ExtractArray ( IEnumerable<XElement> values, string name ) {
-         return values.Select( p => TransformValue( p, name ?? p.Descendants().First().Name.ToString() ) ).ToList();
+            return values.Select(p => {
+                var n = name;
+                if (n == null) {
+                    var descendants = p.Descendants();
+                    n = descendants.First().Name.ToString();
+                }
+                var result = TransformValue(p, n);
+                return result;
+            }).ToList();
       }
 
       private static List<XElement> ExtractStruct ( IEnumerable<XElement> members ) {
