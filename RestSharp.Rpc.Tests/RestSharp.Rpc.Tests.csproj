@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="MockObjects.cs" />
     <Compile Include="DeSerializationTests.cs" />
+    <Compile Include="WordpressTests.cs" />
     <Compile Include="XmlRequestEx.cs" />
     <Compile Include="SerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,13 +82,25 @@
     <Content Include="ResponseData\ArrayOfMixedResponse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ResponseData\ComplexStructArray.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ResponseData\SimpleStructArray.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ResponseData\ArrayOfStringResponse.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ResponseData\OneDateTimeResponse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ResponseData\OneBase64Response.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ResponseData\OneStringResponse.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ResponseData\ComplexStruct.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ResponseData\SimpleStruct.xml">

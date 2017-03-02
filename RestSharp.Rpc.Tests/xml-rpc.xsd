@@ -69,6 +69,7 @@
 			<xsd:element name="dateTime.iso8601" type="DateTime"/>
 			<xsd:element name="array" type="ArrayType"/>
 			<xsd:element name="struct" type="StructType"/>
+			<xsd:element name="nil" type="xsd:string"/>
 		</xsd:choice>
 	</xsd:complexType>
 	<xsd:complexType name="StructType">
@@ -105,7 +106,7 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="DateTime">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[0-9]{4}[0-1][0-9][0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]"/>
+			<xsd:pattern value="[0-9]{4}(-?)[0-1][0-9](-?)[0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9]"/>
 		</xsd:restriction>
-	</xsd:simpleType>	
+	</xsd:simpleType>
 </xsd:schema>

@@ -39,6 +39,15 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
+         public void DeserializeOneDateTime () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\OneDateTimeResponse.xml" );
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<RpcResponseValue<DateTime>>( response );
+            Assert.AreEqual( new DateTime( 2017, 3, 2, 5, 20, 7 ), data.Value );
+         }
+
+         [Test]
          public void DeserializeArrayOfString () {
             var response = new RestResponse();
             response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfStringResponse.xml" );
@@ -48,17 +57,16 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( "One", data.First() );
          }
 
-         // need to figure out how to handle this one
-         //[Test]
-         //public void DeserializeArrayOfMixed () {
-         //   var response = new RestResponse();
-         //   response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfMixedResponse.xml" );
-         //   var deSerializer = new XmlRpcDeserializer();
-         //   var data = deSerializer.Deserialize<List<object>>( response );
-         //   Assert.AreEqual( 5, data.Count );
-         //   Assert.AreEqual( "One", data.First() );
-         //   Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
-         //}
+         [Test]
+         public void DeserializeArrayOfMixed () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfMixedResponse.xml" );
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<List<object>>( response );
+            Assert.AreEqual( 5, data.Count );
+            Assert.AreEqual( "One", data.First() );
+            Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
+         }
 
          [Test]
          public void DeserializeSimpleStruct () {
@@ -80,6 +88,51 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( "Title", data.OTitle );
             Assert.AreEqual( "My Description", data.ODescription );
             Assert.AreEqual( 45, data.OCode );
+         }
+
+         [Test]
+         public void DeserializeComplexStruct () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ComplexStruct.xml" );
+            var deSerializer = new XmlRpcDeserializer() { DateFormat = "yyyy-MM-dd'T'HH':'mm':'ss" };
+            var data = deSerializer.Deserialize<DeSerializeComplexStruct>( response );
+            Assert.AreEqual( "Title", data.title );
+            Assert.AreEqual( "My Description", data.description );
+            Assert.AreEqual( 45, data.code );
+            Assert.IsNotNull( data.subobject );
+            Assert.AreEqual( 3, data.events.Count );
+            Assert.AreEqual( 3, data.events.First().priceLevels.Count );
+            Assert.AreEqual( 3, data.events.First().priceLevels.First().priceTypes.Count );
+
+         }
+
+
+         [Test]
+         public void DeserializeSimpleStructArray () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\SimpleStructArray.xml" );
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<List<DeSerializeSimpleStruct>>( response );
+            Assert.AreEqual( 3, data.Count );
+            Assert.AreEqual( "Title", data.First().title );
+            Assert.AreEqual( "My Description", data.First().description );
+            Assert.AreEqual( 45, data.First().code );
+         }
+
+         [Test]
+         public void DeserializeComplexStructArray () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ComplexStructArray.xml" );
+            var deSerializer = new XmlRpcDeserializer() { DateFormat = "yyyy-MM-dd'T'HH':'mm':'ss" };
+            var data = deSerializer.Deserialize<List<DeSerializeComplexStruct>>( response );
+            Assert.AreEqual( 3, data.Count );
+            Assert.AreEqual( "Title", data.First().title );
+            Assert.AreEqual( "My Description", data.First().description );
+            Assert.AreEqual( 45, data.First().code );
+            Assert.IsNotNull( data.First().subobject );
+            Assert.AreEqual( 3, data.First().events.Count );
+            Assert.AreEqual( 3, data.First().events.First().priceLevels.Count );
+            Assert.AreEqual( 3, data.First().events.First().priceLevels.First().priceTypes.Count );
          }
 
       }
