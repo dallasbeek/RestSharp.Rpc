@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RestSharp.Deserializers;
 using RestSharp.Serializers;
 
 namespace RestSharp.Rpc.Tests {
@@ -33,6 +34,22 @@ namespace RestSharp.Rpc.Tests {
       public int Age { get; set; }
       public SerializeComplexStruct SubObject { get; set; }
       public List<SerializeComplexStruct> SubObjectList { get; set; }
+   }
+
+   public class DeSerializeSimpleStruct {
+
+      public string title { get; set; }
+      public string description { get; set; }
+      public int code { get; set; }
+   }
+
+   public class DeSerializeSimpleStructOverrides {
+      [DeserializeAs( Name ="title")]
+      public string OTitle { get; set; }
+      [DeserializeAs( Name = "description" )]
+      public string ODescription { get; set; }
+      [DeserializeAs( Name = "code" )]
+      public int OCode { get; set; }
    }
 
 }

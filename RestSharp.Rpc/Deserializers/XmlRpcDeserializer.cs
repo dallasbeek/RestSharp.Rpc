@@ -62,8 +62,8 @@ namespace RestSharp.Deserializers {
          string faultStringValue = "unknown";
 
          var faultCodeMember = faultMembers.Where( i => ( string ) i.Element( "name" ) == "faultCode" ).SingleOrDefault();
-         if (faultCodeMember != null ) {
-           if (faultCodeMember.Element("value").Element("int") != null ) {
+         if ( faultCodeMember != null ) {
+            if ( faultCodeMember.Element( "value" ).Element( "int" ) != null ) {
                faultCodeValue = ( int ) faultCodeMember.Element( "value" ).Element( "int" );
             }
             if ( faultCodeMember.Element( "value" ).Element( "i4" ) != null ) {
@@ -389,6 +389,8 @@ namespace RestSharp.Deserializers {
 #endif
             {
             item = element.Value.ChangeType( t, this.Culture );
+         } else if ( t == typeof( byte[] ) ) {
+            item = Convert.FromBase64String( element.Value );
          } else {
             item = Activator.CreateInstance( t );
             this.Map( item, element );
@@ -474,7 +476,7 @@ namespace RestSharp.Deserializers {
          var child = value.Descendants().First();
          var childName = child.Name;
 
-         if ( childName == "string" || childName == "i4" || childName == "int" || childName == "boolean" ||
+         if ( childName == "string" || childName == "i4" || childName == "i8" || childName == "int" || childName == "boolean" ||
              childName == "string" || childName == "double" || childName == "dateTime.iso8601" || childName == "base64" ) {
             return new XElement( name, child.Value );
          } else if ( childName == "array" ) {

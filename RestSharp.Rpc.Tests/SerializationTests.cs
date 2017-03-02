@@ -33,7 +33,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void NoArguments () {
+         public void SerializeNoArguments () {
             var request = new XmlRpcRestRequest( "some.method" );
             request.AddXmlRpcBody( );
 
@@ -61,7 +61,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneString () {
+         public void SerializeOneString () {
             var request = new XmlRpcRestRequest( "some.method" );
             request.AddXmlRpcBody( "hello" );
 
@@ -100,7 +100,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneIntAsI4 () {
+         public void SerializeOneIntAsI4 () {
             var request = new XmlRpcRestRequest( "some.method" );
             request.AddXmlRpcBody( 35 );
 
@@ -137,7 +137,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneIntAsInt () {
+         public void SerializeOneIntAsInt () {
             var request = new XmlRpcRestRequest( "some.method", true );
             request.AddXmlRpcBody( 35 );
 
@@ -174,7 +174,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneBoolean () {
+         public void SerializeOneBoolean () {
             var request = new XmlRpcRestRequest( "some.method", true );
             request.AddXmlRpcBody( true );
 
@@ -211,7 +211,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneDateTime () {
+         public void SerializeOneDateTime () {
             var request = new XmlRpcRestRequest( "some.method", true );
             var date = DateTime.UtcNow;
             request.AddXmlRpcBody( date );
@@ -255,7 +255,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneDateTimeAltFormat () {
+         public void SerializeOneDateTimeAltFormat () {
             var request = new XmlRpcRestRequest( "some.method", true ) {
                DateFormat = "MMddyyyy'T'HH':'mm':'ss"
             };
@@ -300,7 +300,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneDouble () {
+         public void SerializeOneDouble () {
             var request = new XmlRpcRestRequest( "some.method", true );
             request.AddXmlRpcBody( 33m );
 
@@ -337,7 +337,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneBase64 () {
+         public void SerializeOneBase64 () {
             var request = new XmlRpcRestRequest( "some.method", true );
             const string fileContent = "some file content goes here";
             var data = Encoding.ASCII.GetBytes( fileContent );
@@ -377,7 +377,7 @@ namespace RestSharp.Rpc.Tests {
 
 
          [Test]
-         public void OneStringArray () {
+         public void SerializeOneStringArray () {
             var request = new XmlRpcRestRequest( "some.method", true );
             var data = new[]
              {
@@ -427,7 +427,7 @@ namespace RestSharp.Rpc.Tests {
 
 
          [Test]
-         public void OneStringList () {
+         public void SerializeOneStringList () {
             var data = new System.Collections.Generic.List<string> { "one", "two", "three" };
 
             var request = new XmlRpcRestRequest( "some.method" );
@@ -456,7 +456,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneSimpleStruct () {
+         public void SerializeOneSimpleStruct () {
             var data = new SerializeSimpleStruct {
                Name = "Superman",
                Age = 33
@@ -493,7 +493,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneSimpleStructOverrides () {
+         public void SerializeOneSimpleStructOverrides () {
             var data = new SerializeSimpleStrucOverrides {
                Name = "Superman",
                Age = 33
@@ -531,7 +531,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void OneComplexStruct () {
+         public void SerializeOneComplexStruct () {
             var data = new SerializeComplexStruct( true );
 
             var request = new XmlRpcRestRequest( "some.method" );
@@ -566,7 +566,7 @@ namespace RestSharp.Rpc.Tests {
 
 
          [Test]
-         public void ArrayOfComplexStructs () {
+         public void SerializeArrayOfComplexStructs () {
             var data = new List<SerializeComplexStruct>() { new SerializeComplexStruct( true ), new SerializeComplexStruct( true ), new SerializeComplexStruct( true ) } ;
 
             var request = new XmlRpcRestRequest( "some.method" );
