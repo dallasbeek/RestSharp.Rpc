@@ -8,7 +8,8 @@ using System.Xml;
 using System.Xml.Linq;
 using RestSharp.Extensions;
 using RestSharp;
-
+using RestSharp.Rpc.Extensions;
+using RestSharp.Serializers;
 #if !SILVERLIGHT && !WINDOWS_PHONE
 using System.ComponentModel;
 #endif
@@ -352,6 +353,17 @@ namespace RestSharp.Deserializers {
          }
 
          if ( !elements.Any() ) {
+            var props = t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                         .Where(p => p.GetCustomAttribute<SerializeAsAttribute>() != null)
+                         .OrderBy(p => p.GetCustomAttribute<SerializeAsAttribute>().Index)
+                         .ToArray();
+            elements = root.Elements().ToList();
+            elements.Each((element, i) => {
+                element.Elements().Each((child, j) => child.Name = props[j].Name);
+            });
+        }
+
+        if ( !elements.Any() ) {
             XName lowerName = name.ToLower().AsNamespaced( this.Namespace );
 
             elements = root.Descendants()
@@ -474,7 +486,7 @@ namespace RestSharp.Deserializers {
          var child = value.Descendants().First();
          var childName = child.Name;
 
-         if ( childName == "string" || childName == "i4" || childName == "int" || childName == "boolean" ||
+         if ( childName == "string" || childName == "i4" || childName == "i8" || childName == "int" || childName == "boolean" ||
              childName == "string" || childName == "double" || childName == "dateTime.iso8601" || childName == "base64" ) {
             return new XElement( name, child.Value );
          } else if ( childName == "array" ) {
@@ -486,7 +498,7 @@ namespace RestSharp.Deserializers {
       }
 
       private static List<XElement> ExtractArray ( IEnumerable<XElement> values, string name ) {
-         return values.Select( p => TransformValue( p, name ?? p.Descendants().First().Name.ToString() ) ).ToList();
+          return values.Select( p => TransformValue( p, name ?? p.Descendants().First().Name.ToString() ) ).ToList();
       }
 
       private static List<XElement> ExtractStruct ( IEnumerable<XElement> members ) {

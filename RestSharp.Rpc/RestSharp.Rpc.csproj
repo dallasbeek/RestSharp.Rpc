@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Deserializers\XmlRpcDeserializer.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="XmlRpcFaultException.cs" />
     <Compile Include="XmlRpcRestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
