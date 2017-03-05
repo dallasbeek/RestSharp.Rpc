@@ -90,4 +90,8 @@ namespace RestSharp.Rpc.Tests {
 
    }
 
+   public class DeserializeBadlyFormedStruct {
+      [SerializeAs(Index = 0)] public string Filename { get; set; }
+      [SerializeAs(Index = 1)] public long Size { get; set; }
+   }
 }

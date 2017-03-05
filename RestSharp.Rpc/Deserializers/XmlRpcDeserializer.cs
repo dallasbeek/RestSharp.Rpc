@@ -358,11 +358,13 @@ namespace RestSharp.Deserializers {
                          .Where(p => p.GetCustomAttribute<SerializeAsAttribute>() != null)
                          .OrderBy(p => p.GetCustomAttribute<SerializeAsAttribute>().Index)
                          .ToArray();
-            elements = root.Elements().ToList();
-            elements.Each((element, i) => {
-                element.Elements().Each((child, j) => child.Name = props[j].Name);
-            });
-        }
+            if (props.Any()) {
+               elements = root.Elements().ToList();
+               elements.Each((element, i) => {
+                  element.Elements().Each((child, j) => child.Name = props[j].Name);
+               });
+            }
+         }
 
         if ( !elements.Any() ) {
             XName lowerName = name.ToLower().AsNamespaced( this.Namespace );

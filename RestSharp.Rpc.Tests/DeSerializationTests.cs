@@ -134,7 +134,14 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( 3, data.First().events.First().priceLevels.First().priceTypes.Count );
          }
 
+         [Test]
+         public void DeserializeArrayOfBadlyFormedStructs () {
+            var response = new RestResponse();
+            response.Content = EmbeddedResource.LoadFile("ResponseData.ArrayOfBadlyFormedStructs.xml");
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<List<DeserializeBadlyFormedStruct>>(response);
+            Assert.AreEqual( 3, data.Count );
+         }
       }
-
    }
 }
