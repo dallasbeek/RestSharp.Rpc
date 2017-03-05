@@ -63,8 +63,8 @@ namespace RestSharp.Deserializers {
          string faultStringValue = "unknown";
 
          var faultCodeMember = faultMembers.Where( i => ( string ) i.Element( "name" ) == "faultCode" ).SingleOrDefault();
-         if (faultCodeMember != null ) {
-           if (faultCodeMember.Element("value").Element("int") != null ) {
+         if ( faultCodeMember != null ) {
+            if ( faultCodeMember.Element( "value" ).Element( "int" ) != null ) {
                faultCodeValue = ( int ) faultCodeMember.Element( "value" ).Element( "int" );
             }
             if ( faultCodeMember.Element( "value" ).Element( "i4" ) != null ) {
@@ -83,6 +83,7 @@ namespace RestSharp.Deserializers {
       }
 
       protected virtual object Map ( object x, XElement root ) {
+
          Type objType = x.GetType();
 
          PropertyInfo[] props = objType.GetProperties();
@@ -371,6 +372,11 @@ namespace RestSharp.Deserializers {
                            .ToList();
          }
 
+         if ( !elements.Any() ) {
+            elements = root.Descendants()
+                           .ToList();
+         }
+
          this.PopulateListFromElements( t, elements, list );
 
          // get properties too, not just list items
@@ -401,6 +407,10 @@ namespace RestSharp.Deserializers {
 #endif
             {
             item = element.Value.ChangeType( t, this.Culture );
+         } else if ( t == typeof( byte[] ) ) {
+            item = Convert.FromBase64String( element.Value );
+         } else if ( t == typeof( object )) {
+            item = element.Value;
          } else {
             item = Activator.CreateInstance( t );
             this.Map( item, element );
@@ -508,5 +518,24 @@ namespace RestSharp.Deserializers {
       private static XElement ExtractMember ( XElement member ) {
          return TransformValue( member.Element( "value" ), ( string ) member.Element( "name" ) );
       }
+
+      //private static bool TryListOfWhatType ( Type type, out Type innerType ) {
+
+      //   var interfaceTest = new Func<Type, Type>( i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof( IList<> ) ? i.GetGenericArguments().Single() : null );
+
+      //   innerType = interfaceTest( type );
+      //   if ( innerType != null ) {
+      //      return true;
+      //   }
+
+      //   foreach ( var i in type.GetInterfaces() ) {
+      //      innerType = interfaceTest( i );
+      //      if ( innerType != null ) {
+      //         return true;
+      //      }
+      //   }
+
+      //   return false;
+      //}
    }
 }

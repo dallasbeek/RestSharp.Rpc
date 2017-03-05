@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/dallasbeek/RestSharp.Rpc</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Serializer and Deserializer support for RestSharp XML RPC client.</description>
-    <releaseNotes>Initial Release.</releaseNotes>
+    <releaseNotes>This release corrects a number of issues with serializing complex objects.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>REST HTTP RESTSHARP XML RPC</tags>
   </metadata>

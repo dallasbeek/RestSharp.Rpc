@@ -42,5 +42,15 @@ namespace RestSharp {
       public IRestRequest AddXmlRpcBody ( params object[] args ) {
          return AddXmlBody( args );
       }
+
+      public new string DateFormat {
+         get {
+            return base.DateFormat;
+         }
+         set {
+            base.DateFormat = value;
+            XmlSerializer.DateFormat = value;
+         }
+      }
    }
 }

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+        <array>
+          <data>
+            <value>
+              <string>One</string>
+            </value>
+            <value>
+              <boolean>1</boolean>
+            </value>
+            <value>
+              <dateTime.iso8601>20170302T05:20:07</dateTime.iso8601>
+            </value>
+            <value>
+              <i4>256</i4>
+            </value>
+            <value>
+              <double>256.256</double>
+            </value>
+          </data>
+        </array>
+      </value>
+    </param>
+  </params>
+</methodResponse>

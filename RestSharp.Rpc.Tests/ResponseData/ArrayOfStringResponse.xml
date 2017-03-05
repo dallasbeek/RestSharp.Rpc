@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+        <array>
+          <data>
+            <value>
+              <string>One</string>
+            </value>
+            <value>
+              <string>Two</string>
+            </value>
+            <value>
+              <string>Three</string>
+            </value>
+          </data>
+        </array>
+      </value>
+    </param>
+  </params>
+</methodResponse>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0"?>
+<methodResponse>
+  <params>
+    <param>
+      <value>
+        <struct>
+          <member>
+            <name>title</name>
+            <value>
+              <string>Title</string>
+            </value>
+          </member>
+          <member>
+            <name>description</name>
+            <value>
+              <string>My Description</string>
+            </value>
+          </member>
+          <member>
+            <name>code</name>
+            <value>
+              <int>45</int>
+            </value>
+          </member>
+        </struct>
+      </value>
+    </param>
+  </params>
+</methodResponse>
