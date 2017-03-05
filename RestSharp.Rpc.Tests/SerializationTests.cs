@@ -23,11 +23,12 @@ namespace RestSharp.Rpc.Tests {
 
          [OneTimeSetUp]
          public void Setup() {
-             string xsd = EmbeddedResource.LoadFile( "xml-rpc.xsd" );
-             XmlReader xmlReader = XmlReader.Create(new StringReader(xsd));
-             _schema = new XmlSchemaSet();
-             _schema.Add(null, xmlReader);
-             //_schema.Add( null, Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\xml-rpc.xsd" );
+            string xsd = EmbeddedResource.LoadFile( "xml-rpc.xsd" );
+            using (StringReader sr = new StringReader( xsd ) )
+            using (XmlReader xr = XmlReader.Create(sr)) {
+               _schema = new XmlSchemaSet();
+               _schema.Add( null, xr );
+            }
          }
 
          private void ValidateXml(string xml ) {
