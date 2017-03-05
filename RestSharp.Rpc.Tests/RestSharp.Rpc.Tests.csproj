@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmbeddedResource.cs" />
     <Compile Include="MockObjects.cs" />
     <Compile Include="DeSerializationTests.cs" />
     <Compile Include="WordpressTests.cs" />
@@ -64,10 +65,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="xml-rpc.xsd">
+    <EmbeddedResource Include="xml-rpc.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RestSharp.Rpc\RestSharp.Rpc.csproj">
@@ -79,33 +79,15 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ResponseData\ArrayOfMixedResponse.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\ComplexStructArray.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\SimpleStructArray.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\ArrayOfStringResponse.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\OneDateTimeResponse.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\OneBase64Response.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\OneStringResponse.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\ComplexStruct.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ResponseData\SimpleStruct.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="ResponseData\ArrayOfMixedResponse.xml" />
+    <EmbeddedResource Include="ResponseData\ComplexStructArray.xml" />
+    <EmbeddedResource Include="ResponseData\SimpleStructArray.xml" />
+    <EmbeddedResource Include="ResponseData\ArrayOfStringResponse.xml" />
+    <EmbeddedResource Include="ResponseData\OneDateTimeResponse.xml" />
+    <EmbeddedResource Include="ResponseData\OneBase64Response.xml" />
+    <EmbeddedResource Include="ResponseData\OneStringResponse.xml" />
+    <EmbeddedResource Include="ResponseData\ComplexStruct.xml" />
+    <EmbeddedResource Include="ResponseData\SimpleStruct.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

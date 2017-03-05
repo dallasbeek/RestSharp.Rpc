@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.XPath;
@@ -21,8 +23,11 @@ namespace RestSharp.Rpc.Tests {
 
          [OneTimeSetUp]
          public void Setup() {
-            _schema = new XmlSchemaSet();
-            _schema.Add( null, Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\xml-rpc.xsd" );
+             string xsd = EmbeddedResource.LoadFile( "xml-rpc.xsd" );
+             XmlReader xmlReader = XmlReader.Create(new StringReader(xsd));
+             _schema = new XmlSchemaSet();
+             _schema.Add(null, xmlReader);
+             //_schema.Add( null, Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\xml-rpc.xsd" );
          }
 
          private void ValidateXml(string xml ) {

@@ -18,11 +18,10 @@ namespace RestSharp.Rpc.Tests {
       //[TestFixture(TestName = "Serialization")]
       public class DeSerializationTests {
 
-
          [Test]
          public void DeserializeOneString () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\OneStringResponse.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.OneStringResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<RpcResponseValue<string>>( response );
             Assert.AreEqual( "Hello World", data.Value );
@@ -32,7 +31,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeOneBase64 () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\OneBase64Response.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.OneBase64Response.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<RpcResponseValue<byte[]>>( response );
             Assert.AreEqual( "some file content goes here", Encoding.ASCII.GetString( data.Value ) );
@@ -41,7 +40,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeOneDateTime () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\OneDateTimeResponse.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.OneDateTimeResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<RpcResponseValue<DateTime>>( response );
             Assert.AreEqual( new DateTime( 2017, 3, 2, 5, 20, 7 ), data.Value );
@@ -50,7 +49,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeArrayOfString () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfStringResponse.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfStringResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<List<string>>( response );
             Assert.AreEqual( 3, data.Count );
@@ -60,7 +59,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeArrayOfMixed () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfMixedResponse.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<List<object>>( response );
             Assert.AreEqual( 5, data.Count );
@@ -71,7 +70,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeSimpleStruct () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\SimpleStruct.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStruct.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<DeSerializeSimpleStruct>( response );
             Assert.AreEqual( "Title", data.title );
@@ -82,7 +81,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeSimpleStructOverrides () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\SimpleStruct.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStruct.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<DeSerializeSimpleStructOverrides>( response );
             Assert.AreEqual( "Title", data.OTitle );
@@ -93,7 +92,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeComplexStruct () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ComplexStruct.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ComplexStruct.xml" );
             var deSerializer = new XmlRpcDeserializer() { DateFormat = "yyyy-MM-dd'T'HH':'mm':'ss" };
             var data = deSerializer.Deserialize<DeSerializeComplexStruct>( response );
             Assert.AreEqual( "Title", data.title );
@@ -110,7 +109,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeSimpleStructArray () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\SimpleStructArray.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStructArray.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<List<DeSerializeSimpleStruct>>( response );
             Assert.AreEqual( 3, data.Count );
@@ -122,7 +121,7 @@ namespace RestSharp.Rpc.Tests {
          [Test]
          public void DeserializeComplexStructArray () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ComplexStructArray.xml" );
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ComplexStructArray.xml" );
             var deSerializer = new XmlRpcDeserializer() { DateFormat = "yyyy-MM-dd'T'HH':'mm':'ss" };
             var data = deSerializer.Deserialize<List<DeSerializeComplexStruct>>( response );
             Assert.AreEqual( 3, data.Count );
