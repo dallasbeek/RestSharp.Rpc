@@ -63,9 +63,21 @@ namespace RestSharp.Rpc.Tests {
             response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfMixedResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<List<object>>( response );
-            Assert.AreEqual( 5, data.Count );
+            Assert.AreEqual( 6, data.Count );
             Assert.AreEqual( "One", data.First() );
-            Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
+            Assert.AreEqual( 256.256, Convert.ToDecimal( data[4] ) );
+            Assert.AreEqual( "Two", data.Last() );
+         }
+
+         [Test]
+         public void DeserializeArrayOfMixedToObject () {
+            var response = new RestResponse();
+            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\ArrayOfMixedResponse.xml" );
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<DeSerializeMixedArray>( response );
+            Assert.AreEqual( "One", data.FirstString );
+            Assert.AreEqual( "Two", data.ASecondString );
+            //Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
          }
 
          [Test]

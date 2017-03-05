@@ -20,6 +20,9 @@
             <value>
               <double>256.256</double>
             </value>
+            <value>
+              <string>Two</string>
+            </value>          
           </data>
         </array>
       </value>
