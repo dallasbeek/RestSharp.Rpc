@@ -62,9 +62,21 @@ namespace RestSharp.Rpc.Tests {
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<List<object>>( response );
-            Assert.AreEqual( 5, data.Count );
+            Assert.AreEqual( 6, data.Count );
             Assert.AreEqual( "One", data.First() );
-            Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
+            Assert.AreEqual( 256.256, Convert.ToDecimal( data[4] ) );
+            Assert.AreEqual( "Two", data.Last() );
+         }
+
+         [Test]
+         public void DeserializeArrayOfMixedToObject () {
+            var response = new RestResponse();
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedResponse.xml" );
+            var deSerializer = new XmlRpcDeserializer();
+            var data = deSerializer.Deserialize<DeSerializeMixedArray>( response );
+            Assert.AreEqual( "One", data.FirstString );
+            Assert.AreEqual( "Two", data.ASecondString );
+            //Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
          }
 
          [Test]
@@ -135,11 +147,11 @@ namespace RestSharp.Rpc.Tests {
          }
 
          [Test]
-         public void DeserializeArrayOfBadlyFormedStructs () {
+         public void DeserializeArrayOfMixedArray () {
             var response = new RestResponse();
-            response.Content = EmbeddedResource.LoadFile("ResponseData.ArrayOfBadlyFormedStructs.xml");
+            response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedArray.xml" );
             var deSerializer = new XmlRpcDeserializer();
-            var data = deSerializer.Deserialize<List<DeserializeBadlyFormedStruct>>(response);
+            var data = deSerializer.Deserialize<List<DeserializeArrayOfMixedArray>>( response );
             Assert.AreEqual( 3, data.Count );
          }
       }

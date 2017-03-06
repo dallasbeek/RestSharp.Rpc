@@ -90,8 +90,28 @@ namespace RestSharp.Rpc.Tests {
 
    }
 
-   public class DeserializeBadlyFormedStruct {
-      [SerializeAs(Index = 0)] public string Filename { get; set; }
-      [SerializeAs(Index = 1)] public long Size { get; set; }
+   public class DeserializeArrayOfMixedArray {
+      [DeserializeAs( Name = "string" )]
+      public string Filename { get; set; }
+
+      [DeserializeAs( Name = "i8" )]
+      public long Size { get; set; }
    }
+
+   public class DeSerializeMixedArray {
+      [DeserializeAs(Name = "string")]
+      public string FirstString { get; set; }
+      [DeserializeAs( Name = "boolean" )]
+      public bool FirstBoolean { get; set; }
+      [DeserializeAs( Name = "dateTime.iso8601" )]
+      public DateTime FirstDateTime { get; set; }
+      [DeserializeAs( Name = "i4" )]
+      public int FirstInt { get; set; }
+      [DeserializeAs( Name = "double" )]
+      public decimal FirstDouble { get; set; }
+      [DeserializeAs( Name = "string" )]
+      public string ASecondString { get; set; }
+
+   }
+
 }

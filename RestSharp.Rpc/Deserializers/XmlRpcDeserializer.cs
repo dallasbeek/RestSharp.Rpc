@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Linq;
 using RestSharp.Extensions;
 using RestSharp;
-using RestSharp.Rpc.Extensions;
 using RestSharp.Serializers;
 #if !SILVERLIGHT && !WINDOWS_PHONE
 using System.ComponentModel;
@@ -87,6 +86,7 @@ namespace RestSharp.Deserializers {
          Type objType = x.GetType();
 
          PropertyInfo[] props = objType.GetProperties();
+         var attList = new List<XName>();
 
          foreach ( PropertyInfo prop in props ) {
             Type type = prop.PropertyType;
@@ -115,11 +115,12 @@ namespace RestSharp.Deserializers {
                DeserializeAsAttribute attribute = ( DeserializeAsAttribute ) attributes.First();
 
                name = attribute.Name.AsNamespaced( this.Namespace );
+               attList.Add( name );
             } else {
                name = prop.Name.AsNamespaced( this.Namespace );
             }
-
-            object value = this.GetValueFromXml( root, name, prop );
+            var index = attList.Count( c => c == name ) - 1;
+            object value = this.GetValueFromXml( root, name, prop, index );
 
             if ( value == null ) {
                // special case for inline list items
@@ -328,6 +329,10 @@ namespace RestSharp.Deserializers {
             elements = root.Descendants( "struct" ).ToList();
          }
 
+         if ( !elements.Any() ) {
+            elements = root.Descendants( "array" ).ToList();
+         }
+
          string name = t.Name;
          DeserializeAsAttribute attribute = t.GetAttribute<DeserializeAsAttribute>();
 
@@ -353,18 +358,18 @@ namespace RestSharp.Deserializers {
                            .ToList();
          }
 
-         if ( !elements.Any() ) {
-            var props = t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                         .Where(p => p.GetCustomAttribute<SerializeAsAttribute>() != null)
-                         .OrderBy(p => p.GetCustomAttribute<SerializeAsAttribute>().Index)
-                         .ToArray();
-            if (props.Any()) {
-               elements = root.Elements().ToList();
-               elements.Each((element, i) => {
-                  element.Elements().Each((child, j) => child.Name = props[j].Name);
-               });
-            }
-         }
+         //if ( !elements.Any() ) {
+         //   var props = t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+         //                .Where(p => p.GetCustomAttribute<SerializeAsAttribute>() != null)
+         //                .OrderBy(p => p.GetCustomAttribute<SerializeAsAttribute>().Index)
+         //                .ToArray();
+         //   if (props.Any()) {
+         //      elements = root.Elements().ToList();
+         //      elements.Each((element, i) => {
+         //         element.Elements().Each((child, j) => child.Name = props[j].Name);
+         //      });
+         //   }
+         //}
 
         if ( !elements.Any() ) {
             XName lowerName = name.ToLower().AsNamespaced( this.Namespace );
@@ -411,7 +416,7 @@ namespace RestSharp.Deserializers {
             item = element.Value.ChangeType( t, this.Culture );
          } else if ( t == typeof( byte[] ) ) {
             item = Convert.FromBase64String( element.Value );
-         } else if ( t == typeof( object )) {
+         } else if ( t == typeof( object ) ) {
             item = element.Value;
          } else {
             item = Activator.CreateInstance( t );
@@ -421,11 +426,11 @@ namespace RestSharp.Deserializers {
          return item;
       }
 
-      protected virtual object GetValueFromXml ( XElement root, XName name, PropertyInfo prop ) {
+      protected virtual object GetValueFromXml ( XElement root, XName name, PropertyInfo prop, int index = 0 ) {
          object val = null;
 
          if ( root != null ) {
-            XElement element = this.GetElementByName( root, name );
+            XElement element = this.GetElementByName( root, name, index );
 
             if ( element == null ) {
                XAttribute attribute = this.GetAttributeByName( root, name );
@@ -443,26 +448,40 @@ namespace RestSharp.Deserializers {
          return val;
       }
 
-      protected virtual XElement GetElementByName ( XElement root, XName name ) {
+      protected virtual XElement GetElementByName ( XElement root, XName name, int index = 0 ) {
          XName lowerName = name.LocalName.ToLower().AsNamespaced( name.NamespaceName );
          XName camelName = name.LocalName.ToCamelCase( this.Culture ).AsNamespaced( name.NamespaceName );
 
-         if ( root.Element( name ) != null ) {
-            return root.Element( name );
-         }
+         if ( index > 0 ) {
+            var elements = root.Elements( name );
+            if ( !elements.Any() ) {
+               elements = root.Elements( lowerName );
+            }
 
-         if ( root.Element( lowerName ) != null ) {
-            return root.Element( lowerName );
-         }
+            if ( !elements.Any() ) {
+               elements = root.Elements( camelName );
+            }
 
-         if ( root.Element( camelName ) != null ) {
-            return root.Element( camelName );
-         }
+            if ( elements.Any() && elements.Count() >= index + 1 ) {
+               return elements.Skip( index ).First();
+            }
+         } else {
+            if ( root.Element( name ) != null ) {
+               return root.Element( name );
+            }
 
-         if ( name == "Value".AsNamespaced( name.NamespaceName ) ) {
-            return root;
-         }
+            if ( root.Element( lowerName ) != null ) {
+               return root.Element( lowerName );
+            }
 
+            if ( root.Element( camelName ) != null ) {
+               return root.Element( camelName );
+            }
+
+            if ( name == "Value".AsNamespaced( name.NamespaceName ) ) {
+               return root;
+            }
+         }
          // try looking for element that matches sanitized property name (Order by depth)
          return root.Descendants()
                     .OrderBy( d => d.Ancestors().Count() )
@@ -500,7 +519,7 @@ namespace RestSharp.Deserializers {
 
          if ( childName == "string" || childName == "i4" || childName == "i8" || childName == "int" || childName == "boolean" ||
              childName == "string" || childName == "double" || childName == "dateTime.iso8601" || childName == "base64" ) {
-            return new XElement( name, child.Value );
+            return new XElement( name == "array" ? childName : name, child.Value );
          } else if ( childName == "array" ) {
             return new XElement( name, ExtractArray( child.Element( "data" ).Elements( "value" ), name == "Response" ? null : name ) );
          } else if ( childName == "struct" ) {

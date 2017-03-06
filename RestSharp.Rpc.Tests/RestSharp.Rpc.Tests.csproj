@@ -88,9 +88,9 @@
     <EmbeddedResource Include="ResponseData\OneStringResponse.xml" />
     <EmbeddedResource Include="ResponseData\ComplexStruct.xml" />
     <EmbeddedResource Include="ResponseData\SimpleStruct.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ResponseData\ArrayOfBadlyFormedStructs.xml" />
+    <EmbeddedResource Include="ResponseData\ArrayOfMixedArray.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
