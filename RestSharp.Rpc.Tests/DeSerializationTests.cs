@@ -18,11 +18,19 @@ namespace RestSharp.Rpc.Tests {
       //[TestFixture(TestName = "Serialization")]
       public class DeSerializationTests {
 
+         private string GetResource ( string name ) {
+            Assembly a = Assembly.GetExecutingAssembly();
+            using ( Stream s = a.GetManifestResourceStream( "RestSharp.Rpc.Tests.ResponseData." + name ) ) {
+               using ( StreamReader sr = new StreamReader( s ) ) {
+                  return sr.ReadToEnd();
+               }
+            }
+         }
 
          [Test]
          public void DeserializeOneString () {
             var response = new RestResponse();
-            response.Content = File.ReadAllText( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location ) + @"\ResponseData\OneStringResponse.xml" );
+            response.Content = GetResource("OneStringResponse.xml" );
             var deSerializer = new XmlRpcDeserializer();
             var data = deSerializer.Deserialize<RpcResponseValue<string>>( response );
             Assert.AreEqual( "Hello World", data.Value );

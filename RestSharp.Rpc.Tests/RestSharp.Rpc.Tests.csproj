@@ -97,9 +97,9 @@
     <Content Include="ResponseData\OneBase64Response.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ResponseData\OneStringResponse.xml">
+    <EmbeddedResource Include="ResponseData\OneStringResponse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="ResponseData\ComplexStruct.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
