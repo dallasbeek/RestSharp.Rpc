@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="JsonRpcTests.cs" />
     <Compile Include="MockObjects.cs" />
     <Compile Include="DeSerializationTests.cs" />
     <Compile Include="WordpressTests.cs" />

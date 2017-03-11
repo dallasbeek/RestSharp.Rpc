@@ -18,7 +18,7 @@ namespace RestSharp.Rpc.Tests {
       //[TestFixture(TestName = "Serialization")]
       public class DeSerializationTests {
 
-         [Test]
+         [Test, Category("Xml Deserialize")]
          public void DeserializeOneString () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.OneStringResponse.xml" );
@@ -28,7 +28,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeOneBase64 () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.OneBase64Response.xml" );
@@ -37,7 +37,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( "some file content goes here", Encoding.ASCII.GetString( data.Value ) );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeOneDateTime () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.OneDateTimeResponse.xml" );
@@ -46,7 +46,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( new DateTime( 2017, 3, 2, 5, 20, 7 ), data.Value );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeArrayOfString () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfStringResponse.xml" );
@@ -56,7 +56,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( "One", data.First() );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeArrayOfMixed () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedResponse.xml" );
@@ -68,7 +68,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( "Two", data.Last() );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeArrayOfMixedToObject () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedResponse.xml" );
@@ -79,7 +79,7 @@ namespace RestSharp.Rpc.Tests {
             //Assert.AreEqual( 256.256, Convert.ToDecimal( data.Last() ) );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeSimpleStruct () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStruct.xml" );
@@ -90,7 +90,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( 45, data.code );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeSimpleStructOverrides () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStruct.xml" );
@@ -101,7 +101,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( 45, data.OCode );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeComplexStruct () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ComplexStruct.xml" );
@@ -118,7 +118,7 @@ namespace RestSharp.Rpc.Tests {
          }
 
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeSimpleStructArray () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.SimpleStructArray.xml" );
@@ -130,7 +130,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( 45, data.First().code );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeComplexStructArray () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ComplexStructArray.xml" );
@@ -146,7 +146,7 @@ namespace RestSharp.Rpc.Tests {
             Assert.AreEqual( 3, data.First().events.First().priceLevels.First().priceTypes.Count );
          }
 
-         [Test]
+         [Test, Category( "Xml Deserialize" )]
          public void DeserializeArrayOfMixedArray () {
             var response = new RestResponse();
             response.Content = EmbeddedResource.LoadFile( "ResponseData.ArrayOfMixedArray.xml" );

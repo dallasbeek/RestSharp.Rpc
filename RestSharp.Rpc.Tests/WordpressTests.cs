@@ -17,7 +17,7 @@ namespace RestSharp.Rpc.Tests {
       //[TestFixture(TestName = "Serialization")]
       public class WordpressTests {
 
-         [Test]
+         [Test, Category( "Xml Wordpress" )]
          public void WordPressHelloWorld () {
             var rpcClient = new XmlRpcRestClient( "https://wordpress.com/xmlrpc.php" );
 
@@ -29,7 +29,7 @@ namespace RestSharp.Rpc.Tests {
 
          }
 
-         [Test]
+         [Test, Category( "Xml Wordpress" )]
          public void WordPressAddTwoNumbers () {
             var rpcClient = new XmlRpcRestClient( "https://wordpress.com/xmlrpc.php" );
 
@@ -43,7 +43,7 @@ namespace RestSharp.Rpc.Tests {
 
          }
 
-         [Test]
+         [Test, Category( "Xml Wordpress" )]
          public void WordPressFault () {
             var rpcClient = new XmlRpcRestClient( "https://wordpress.com/xmlrpc.php" );
 
