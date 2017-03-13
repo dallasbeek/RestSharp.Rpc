@@ -150,127 +150,127 @@ namespace RestSharp.Serializers {
          foreach ( object item in ( IList ) obj ) {
             data.Add( SerializeValueType( item ) );
          }
-         return new XElement( "array", data ) ;
+         return new XElement( "array", data );
       }
 
-//      private void SerializeArguments ( XContainer container, object obj ) {
-//         var parameters = obj as object[];
+      //      private void SerializeArguments ( XContainer container, object obj ) {
+      //         var parameters = obj as object[];
 
-//         if ( parameters == null || parameters.Length == 0 ) {
-//            return;
-//         }
+      //         if ( parameters == null || parameters.Length == 0 ) {
+      //            return;
+      //         }
 
-//         var paramsElement = new XElement( "params" );
-//         foreach ( var param in parameters ) {
-//            var paramElement = new XElement( "param" );
-//            var valueElement = new XElement( "value" );
-//            Type propType = param.GetType();
-//#if !WINDOWS_UWP
-//            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
-//#else
-//                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
-//#endif
-//                {
-//               paramElement.Add( SerializeValue( param ) );
-//            } else if ( propType.Name == "IList`1" || propType.GetInterface( "IList`1" ) != null ) {
-//               SerializeArray( valueElement, ( IList ) param );
-//               paramElement.Add( valueElement );
-//            } else {
-//               SerializeStruct( valueElement, param );
-//               paramElement.Add( valueElement );
-//            }
-//            paramsElement.Add( paramElement );
-//         }
-//         container.Add( paramsElement );
-//      }
+      //         var paramsElement = new XElement( "params" );
+      //         foreach ( var param in parameters ) {
+      //            var paramElement = new XElement( "param" );
+      //            var valueElement = new XElement( "value" );
+      //            Type propType = param.GetType();
+      //#if !WINDOWS_UWP
+      //            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
+      //#else
+      //                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
+      //#endif
+      //                {
+      //               paramElement.Add( SerializeValue( param ) );
+      //            } else if ( propType.Name == "IList`1" || propType.GetInterface( "IList`1" ) != null ) {
+      //               SerializeArray( valueElement, ( IList ) param );
+      //               paramElement.Add( valueElement );
+      //            } else {
+      //               SerializeStruct( valueElement, param );
+      //               paramElement.Add( valueElement );
+      //            }
+      //            paramsElement.Add( paramElement );
+      //         }
+      //         container.Add( paramsElement );
+      //      }
 
-//      private void SerializeStruct ( XContainer root, object obj ) {
-//         Type objType = obj.GetType();
-//         IEnumerable<PropertyInfo> props = from p in objType.GetProperties()
-//                                           let indexAttribute = p.GetAttribute<SerializeAsAttribute>()
-//                                           where p.CanRead && p.CanWrite
-//                                           orderby indexAttribute == null
-//                                               ? int.MaxValue
-//                                               : indexAttribute.Index
-//                                           select p;
-//         SerializeAsAttribute globalOptions = objType.GetAttribute<SerializeAsAttribute>();
+      //      private void SerializeStruct ( XContainer root, object obj ) {
+      //         Type objType = obj.GetType();
+      //         IEnumerable<PropertyInfo> props = from p in objType.GetProperties()
+      //                                           let indexAttribute = p.GetAttribute<SerializeAsAttribute>()
+      //                                           where p.CanRead && p.CanWrite
+      //                                           orderby indexAttribute == null
+      //                                               ? int.MaxValue
+      //                                               : indexAttribute.Index
+      //                                           select p;
+      //         SerializeAsAttribute globalOptions = objType.GetAttribute<SerializeAsAttribute>();
 
-//         var structElement = new XElement( "struct" );
+      //         var structElement = new XElement( "struct" );
 
-//         foreach ( PropertyInfo prop in props ) {
-//            string name = prop.Name;
-//            object rawValue = prop.GetValue( obj, null );
+      //         foreach ( PropertyInfo prop in props ) {
+      //            string name = prop.Name;
+      //            object rawValue = prop.GetValue( obj, null );
 
-//            if ( rawValue == null ) {
-//               continue;
-//            }
+      //            if ( rawValue == null ) {
+      //               continue;
+      //            }
 
-//            Type propType = prop.PropertyType;
-//            SerializeAsAttribute settings = prop.GetAttribute<SerializeAsAttribute>();
+      //            Type propType = prop.PropertyType;
+      //            SerializeAsAttribute settings = prop.GetAttribute<SerializeAsAttribute>();
 
-//            if ( settings != null ) {
-//               name = settings.Name.HasValue()
-//                   ? settings.Name
-//                   : name;
-//            }
+      //            if ( settings != null ) {
+      //               name = settings.Name.HasValue()
+      //                   ? settings.Name
+      //                   : name;
+      //            }
 
-//            SerializeAsAttribute options = prop.GetAttribute<SerializeAsAttribute>();
+      //            SerializeAsAttribute options = prop.GetAttribute<SerializeAsAttribute>();
 
-//            if ( options != null ) {
-//               name = options.TransformName( name );
-//            } else if ( globalOptions != null ) {
-//               name = globalOptions.TransformName( name );
-//            }
+      //            if ( options != null ) {
+      //               name = options.TransformName( name );
+      //            } else if ( globalOptions != null ) {
+      //               name = globalOptions.TransformName( name );
+      //            }
 
-//            XElement memberElement = new XElement( "member", new XElement( "name", name ) );
-//            var valueElement = new XElement( "value" );
+      //            XElement memberElement = new XElement( "member", new XElement( "name", name ) );
+      //            var valueElement = new XElement( "value" );
 
-//#if !WINDOWS_UWP
-//            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
-//#else
-//                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
-//#endif
-//                {
+      //#if !WINDOWS_UWP
+      //            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
+      //#else
+      //                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
+      //#endif
+      //                {
 
-//               memberElement.Add( SerializeValue( rawValue ) );
-//            } else if ( propType.Name == "IList`1" || propType.GetInterface( "IList`1" ) != null ) {
-//               SerializeArray( valueElement, ( IList ) rawValue );
-//               memberElement.Add( valueElement );
-//            } else {
+      //               memberElement.Add( SerializeValue( rawValue ) );
+      //            } else if ( propType.Name == "IList`1" || propType.GetInterface( "IList`1" ) != null ) {
+      //               SerializeArray( valueElement, ( IList ) rawValue );
+      //               memberElement.Add( valueElement );
+      //            } else {
 
-//               SerializeStruct( valueElement, rawValue );
-//               memberElement.Add( valueElement );
-//            }
+      //               SerializeStruct( valueElement, rawValue );
+      //               memberElement.Add( valueElement );
+      //            }
 
-//            structElement.Add( memberElement );
-//         }
-//         root.Add( structElement );
-//      }
+      //            structElement.Add( memberElement );
+      //         }
+      //         root.Add( structElement );
+      //      }
 
-//      private void SerializeArray ( XContainer root, IList obj ) {
+      //      private void SerializeArray ( XContainer root, IList obj ) {
 
-//         var data = new XElement( "data" );
-//         foreach ( object item in ( IList ) obj ) {
-//            var valueElement = new XElement( "value" );
-//            var propType = item.GetType();
-//#if !WINDOWS_UWP
-//            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
-//#else
-//                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
-//#endif
-//                {
+      //         var data = new XElement( "data" );
+      //         foreach ( object item in ( IList ) obj ) {
+      //            var valueElement = new XElement( "value" );
+      //            var propType = item.GetType();
+      //#if !WINDOWS_UWP
+      //            if ( propType.IsPrimitive || propType.IsValueType || propType == typeof( string ) || propType == typeof( byte[] ) )
+      //#else
+      //                if (propType.GetTypeInfo().IsPrimitive || propType.GetTypeInfo().IsValueType || propType == typeof(string) ||  propType == typeof( byte[] ))
+      //#endif
+      //                {
 
-//               data.Add( SerializeValue( item ) );
-//            } else if ( propType is IList ) {
+      //               data.Add( SerializeValue( item ) );
+      //            } else if ( propType is IList ) {
 
-//            } else {
-//               SerializeStruct( valueElement, item );
-//               data.Add( valueElement );
-//            }
-//         }
-//         root.Add( new XElement( "array", data ) );
+      //            } else {
+      //               SerializeStruct( valueElement, item );
+      //               data.Add( valueElement );
+      //            }
+      //         }
+      //         root.Add( new XElement( "array", data ) );
 
-//      }
+      //      }
 
       //private XElement SerializeValue ( object obj ) {
       //   var type = obj.GetType();

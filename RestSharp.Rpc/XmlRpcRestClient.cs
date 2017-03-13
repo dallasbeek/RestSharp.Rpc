@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RestSharp.Deserializers;
 
 namespace RestSharp {
@@ -20,10 +16,6 @@ namespace RestSharp {
       public XmlRpcRestClient ( Uri baseUrl ) : base( baseUrl ) {
          AddHandler( "text/xml", new XmlRpcDeserializer() );
       }
-
-      //public virtual IRestResponse<T> ExecuteRpc<T> ( IRestRequest request ){
-      //   return Execute<T>( request );
-      //}
 
    }
 }

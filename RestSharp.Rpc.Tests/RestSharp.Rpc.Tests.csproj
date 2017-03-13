@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,13 +56,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmbeddedResource.cs" />
-    <Compile Include="JsonRpcTests.cs" />
+    <Compile Include="JsonDeserializationTests.cs" />
+    <Compile Include="JsonSerializationTests.cs" />
     <Compile Include="MockObjects.cs" />
-    <Compile Include="DeSerializationTests.cs" />
-    <Compile Include="WordpressTests.cs" />
+    <Compile Include="JsonRequestEx.cs" />
+    <Compile Include="XmlDeserializaationTests.cs" />
     <Compile Include="XmlRequestEx.cs" />
-    <Compile Include="SerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlSerializationTests.cs" />
+    <Compile Include="XmlWordpressTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -80,18 +83,33 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ResponseData\ArrayOfMixedResponse.xml" />
-    <EmbeddedResource Include="ResponseData\ComplexStructArray.xml" />
-    <EmbeddedResource Include="ResponseData\SimpleStructArray.xml" />
-    <EmbeddedResource Include="ResponseData\ArrayOfStringResponse.xml" />
-    <EmbeddedResource Include="ResponseData\OneDateTimeResponse.xml" />
-    <EmbeddedResource Include="ResponseData\OneBase64Response.xml" />
-    <EmbeddedResource Include="ResponseData\OneStringResponse.xml" />
-    <EmbeddedResource Include="ResponseData\ComplexStruct.xml" />
-    <EmbeddedResource Include="ResponseData\SimpleStruct.xml" />
-    <EmbeddedResource Include="ResponseData\ArrayOfMixedArray.xml">
+    <EmbeddedResource Include="ResponseData\XmlArrayOfMixedResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlComplexStructArrayResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlSimpleStructArrayResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlArrayOfStringResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlOneDateTimeResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlOneBase64Response.xml" />
+    <EmbeddedResource Include="ResponseData\XmlOneStringResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlComplexStructResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlSimpleStructResponse.xml" />
+    <EmbeddedResource Include="ResponseData\XmlArrayOfMixedArrayResponse.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResponseData\JsonOneStringResponse.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResponseData\JsonSimpleStructResponse.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResponseData\JsonArrayOfStringResponse.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResponseData\JsonSimpleStructArrayResponse.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ResponseData\JsonErrorResponse.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
 
 namespace RestSharp {
 
-   public class RpcResponseValue<T> {// where T : IConvertible {
+   public class RpcResponseValue<T> {
       public T Value { get; set; }
    }
 

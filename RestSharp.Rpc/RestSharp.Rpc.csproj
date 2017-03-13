@@ -44,12 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Deserializers\JsonRpcDeserializer.cs" />
     <Compile Include="Deserializers\XmlRpcDeserializer.cs" />
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Serializers\JsonRpcSerializer.cs" />
+    <Compile Include="JsonRpcFaultException.cs" />
     <Compile Include="XmlRpcFaultException.cs" />
     <Compile Include="JsonRpcRestClient.cs" />
     <Compile Include="XmlRpcRestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="JsonRpcRestRequest.cs" />
     <Compile Include="XmlRpcRestRequest.cs" />
     <Compile Include="RpcResponseValue.cs" />
     <Compile Include="Serializers\XmlRpcSerializer.cs" />
